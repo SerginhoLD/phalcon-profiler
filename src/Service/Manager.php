@@ -1,0 +1,102 @@
+<?php
+declare(strict_types=1);
+
+namespace SerginhoLD\Phalcon\WebProfiler\Service;
+
+use DateTimeInterface;
+use Phalcon\Config\ConfigInterface;
+use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Http\RequestInterface;
+use Phalcon\Http\Response;
+use SerginhoLD\Phalcon\WebProfiler\Collector\CollectorInterface;
+
+class Manager extends AbstractInjectionAware
+{
+    /**
+     * @return array<CollectorInterface>
+     */
+    public function collectors(): array
+    {
+        static $collectors = [];
+
+        if ($collectors) {
+            return $collectors;
+        }
+
+        foreach ($this->config()['collectors'] as $name) {
+            /** @var CollectorInterface $collector */
+            $collector = $this->getDI()->getShared($name);
+            $collectors[$collector->name()] = $collector;
+        }
+
+        return $collectors;
+    }
+
+    private function config(): ConfigInterface
+    {
+        return $this->getDI()->getShared('profilerConfig');
+    }
+
+    public function requests(): array
+    {
+        $dir = $this->config()['tagsDir'];
+        $files = scandir($dir, SCANDIR_SORT_DESCENDING);
+        $data = [];
+
+        foreach ($files as $tag) {
+            if (in_array($tag, ['.', '..', '.gitignore'])) {
+                continue;
+            }
+
+            $data[$tag] = (new DataReader($dir . '/' . $tag))->read('_meta');
+        }
+
+        return $data;
+    }
+
+    public function data(string $tag, string $panel): array
+    {
+        $collectors = $this->collectors();
+        $collector = $collectors[$panel] ?? current($collectors);
+        $panel = $collector->name();
+        $dir = $this->config()['tagsDir'];
+
+        if ('last' === $tag) {
+            $tag = scandir($dir, SCANDIR_SORT_DESCENDING)[0];
+        }
+
+        $archive = new DataReader($dir . '/' . $tag);
+
+        return array_merge($archive->read($panel), [
+            '_meta' => $archive->read('_meta'),
+            '_templatePath' => $collector->templatePath(),
+            '_tag' => $tag,
+            '_panel' => $panel,
+        ]);
+    }
+
+    public function save(DateTimeInterface $requestTime, RequestInterface $request, Response $response): void
+    {
+        $dir = $this->config()['tagsDir'];
+
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $tag = uniqid();
+        $archive = new DataWriter($dir . '/' . $tag);
+
+        foreach ($this->collectors() as $collector) {
+            $archive->add($collector->name(), $collector->collect());
+        }
+
+        $archive->add('_meta', [
+            'method' => $request->getMethod(),
+            'uri' => $request->getURI(),
+            'statusCode' => $response->getStatusCode() ?? 200,
+            'requestTime' => $requestTime,
+        ]);
+
+        $response->setHeader('X-Profiler-Tag', $tag);
+    }
+}

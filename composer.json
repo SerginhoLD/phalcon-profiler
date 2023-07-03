@@ -1,0 +1,23 @@
+{
+  "name": "serginhold/phalcon-profiler",
+  "type": "library",
+  "keywords": ["phalcon", "profiler"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Sergei Zubrilin",
+      "homepage": "https://github.com/SerginhoLD"
+    }
+  ],
+  "require": {
+    "php": ">=8.0",
+    "ext-phalcon": "^5.1",
+    "ext-zip": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "SerginhoLD\\Phalcon\\WebProfiler\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
