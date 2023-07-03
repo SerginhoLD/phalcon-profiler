@@ -1,6 +1,6 @@
 # Phalcon profiler
 
-`composer require serginhold/phalcon-profiler`
+`composer require --dev serginhold/phalcon-profiler`
 
 * PHP >= 8.0
 * Phalcon >= 5.1
