@@ -10,7 +10,7 @@
         <div style="display: flex">
             <a href="{{ url(['for': '_profiler-tag', 'tag': _tag]) }}" style="margin-right: {{ gutter }}rem; text-decoration: none; color: #6ea8fe" target="_blank">{{ _tag }}</a>
             <a title="Close" style="display: block; line-height: 1.15rem; padding: 0.6rem {{ gutter }}rem; background: #343a40; color: inherit; cursor: pointer" onclick="document.getElementById('phalcon-profiler').remove()">
-                <svg style="height: 1rem; width: auto" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                <svg style="height: 1rem; width: auto; vertical-align: inherit" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
                 </svg>
             </a>
