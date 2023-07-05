@@ -6,8 +6,10 @@ namespace SerginhoLD\Phalcon\WebProfiler\Service;
 use DateTimeInterface;
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\AbstractInjectionAware;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Http\RequestInterface;
-use Phalcon\Http\Response;
+use Phalcon\Http\ResponseInterface;
+use Phalcon\Mvc\Router\RouteInterface;
 use SerginhoLD\Phalcon\WebProfiler\Collector\CollectorInterface;
 
 class Manager extends AbstractInjectionAware
@@ -35,6 +37,14 @@ class Manager extends AbstractInjectionAware
     private function config(): ConfigInterface
     {
         return $this->getDI()->getShared('profilerConfig');
+    }
+
+    public function bar(string $tag): array
+    {
+        return [
+            '_meta' => (new DataReader($this->config()['tagsDir'] . '/' . $tag))->read('_meta'),
+            '_tag' => $tag,
+        ];
     }
 
     public function requests(): array
@@ -75,7 +85,7 @@ class Manager extends AbstractInjectionAware
         ]);
     }
 
-    public function save(DateTimeInterface $requestTime, RequestInterface $request, Response $response): void
+    public function save(string $tag, DateTimeInterface $requestTime, InjectionAwareInterface $app, ResponseInterface $response): void
     {
         $dir = $this->config()['tagsDir'];
 
@@ -83,20 +93,28 @@ class Manager extends AbstractInjectionAware
             mkdir($dir, 0755, true);
         }
 
-        $tag = uniqid();
         $archive = new DataWriter($dir . '/' . $tag);
 
         foreach ($this->collectors() as $collector) {
             $archive->add($collector->name(), $collector->collect());
         }
 
+        /**
+         * @var RequestInterface $request
+         * @var RouteInterface|null $route
+         * @var Stopwatch $stopwatch
+         */
+        $request = $app->getDI()->getShared('request');
+        $route = $app->getDI()->getShared('router')->getMatchedRoute();
+        $stopwatch = $app->getDI()->getShared('profilerStopwatch');
+
         $archive->add('_meta', [
             'method' => $request->getMethod(),
             'uri' => $request->getURI(),
             'statusCode' => $response->getStatusCode() ?? 200,
             'requestTime' => $requestTime,
+            'executionTime' => $stopwatch->final(false),
+            'route' => !$route ? null : sprintf('%s [%s]', $route->getName(), $route->getRouteId()),
         ]);
-
-        $response->setHeader('X-Profiler-Tag', $tag);
     }
 }

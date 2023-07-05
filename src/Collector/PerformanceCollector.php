@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace SerginhoLD\Phalcon\WebProfiler\Collector;
 
 use Phalcon\Db\Adapter\AdapterInterface;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Dispatcher\AbstractDispatcher;
 use Phalcon\Events\EventInterface;
 use Phalcon\Http\ResponseInterface;
-use Phalcon\Mvc\Application;
 use Phalcon\Mvc\View\Engine\AbstractEngine;
 use SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch;
 
@@ -59,18 +59,18 @@ HTML;
         ];
     }
 
-    public function beforeSendResponse(EventInterface $event, Application $app, ResponseInterface $response): void
+    public function beforeSendResponse(EventInterface $event, InjectionAwareInterface $app, ResponseInterface $response): void
     {
-        $this->maxScale = $this->stopwatch->now($this->stopwatch->origin());
+        $this->maxScale = $this->stopwatch->final(true);
     }
 
-    public function boot(EventInterface $event, Application $app): bool
+    public function boot(EventInterface $event, InjectionAwareInterface $app): bool
     {
         $this->stopwatch->start('router');
         return true;
     }
 
-    public function beforeHandleRequest(EventInterface $event, Application $app): bool
+    public function beforeHandleRequest(EventInterface $event, InjectionAwareInterface $app): bool
     {
         $this->stopwatch->stop('router');
         return true;

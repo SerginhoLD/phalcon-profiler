@@ -13,7 +13,7 @@ use SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch;
 class IndexController extends Controller
 {
     /**
-     * @Get('/')
+     * @Get('/', name='home')
      */
     public function indexAction(): void
     {

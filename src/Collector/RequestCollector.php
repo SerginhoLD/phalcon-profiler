@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace SerginhoLD\Phalcon\WebProfiler\Collector;
 
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Events\EventInterface;
 use Phalcon\Http\RequestInterface;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Application;
+use Phalcon\Http\ResponseInterface;
 
 class RequestCollector implements CollectorInterface
 {
     private RequestInterface $request;
 
-    private Response $response;
+    private ResponseInterface $response;
 
-    public function beforeSendResponse(EventInterface $event, Application $app, Response $response): void
+    public function beforeSendResponse(EventInterface $event, InjectionAwareInterface $app, ResponseInterface $response): void
     {
         $this->request = $app->getDI()->getShared('request');
         $this->response = $response;

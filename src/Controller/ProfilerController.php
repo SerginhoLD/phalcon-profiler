@@ -29,6 +29,17 @@ class ProfilerController extends Controller
         return $this->render($data['_templatePath'], $data);
     }
 
+    public function barAction(string $tag): ResponseInterface
+    {
+        try {
+            /** @var Manager $service */
+            $service = $this->getDI()->getShared(Manager::class);var_dump($service->bar($tag));
+            return $this->render('@profiler/bar', $service->bar($tag));
+        } catch (\Throwable $e) {
+            return (new Response())->setStatusCode(500);
+        }
+    }
+
     private function render(string $path, array $params): ResponseInterface
     {
         /** @var View $view */

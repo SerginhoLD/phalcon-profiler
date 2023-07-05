@@ -4,18 +4,21 @@ declare(strict_types=1);
 namespace SerginhoLD\Phalcon\WebProfiler\Provider;
 
 use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\Events\EventInterface;
 use Phalcon\Events\Manager;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Application;
+use Phalcon\Http\ResponseInterface;
 use Phalcon\Mvc\RouterInterface;
+use Phalcon\Mvc\ViewBaseInterface;
 use SerginhoLD\Phalcon\WebProfiler\Collector;
 use SerginhoLD\Phalcon\WebProfiler\Service\Manager as Profiler;
 
 class EventsProvider implements ServiceProviderInterface
 {
     private \DateTimeInterface $requestTime;
+
+    private string $profilerTag;
 
     public function register(DiInterface $di): void
     {
@@ -33,6 +36,7 @@ class EventsProvider implements ServiceProviderInterface
         $events = [
             // profiler
             ['application:boot', $this, 1024],
+            ['view:beforeRender', $this, 1024],
             ['application:beforeSendResponse', $this, 0],
             // request
             ['application:beforeSendResponse',  Collector\RequestCollector::class],
@@ -72,13 +76,20 @@ class EventsProvider implements ServiceProviderInterface
         $managerService->setDefinition($managerDefinition);
     }
 
-    public function boot(EventInterface $event, Application $app): bool
+    public function boot(EventInterface $event, InjectionAwareInterface $app): bool
     {
         $this->requestTime = new \DateTimeImmutable();
+        $this->profilerTag = uniqid();
         return true;
     }
 
-    public function beforeSendResponse(EventInterface $event, Application $app, Response $response): void
+    public function beforeRender(EventInterface $event, ViewBaseInterface $view): bool
+    {
+        $view->setVar('_profilerTag', $this->profilerTag);
+        return true;
+    }
+
+    public function beforeSendResponse(EventInterface $event, InjectionAwareInterface $app, ResponseInterface $response): void
     {
         /** @var RouterInterface $router */
         $router = $app->getDI()->getShared('router');
@@ -87,8 +98,10 @@ class EventsProvider implements ServiceProviderInterface
             return;
         }
 
+        $response->setHeader('X-Profiler-Tag', $this->profilerTag);
+
         /** @var Profiler $profiler */
         $profiler = $app->getDI()->getShared(Profiler::class);
-        $profiler->save($this->requestTime, $app->getDI()->getShared('request'), $response);
+        $profiler->save($this->profilerTag, $this->requestTime, $app, $response);
     }
 }

@@ -49,6 +49,10 @@ class RouterProvider implements ServiceProviderInterface
                 'controller' => ProfilerController::class,
                 'action' => 'tagAction',
             ], 'GET'))->beforeMatch($this->beforeMatchRoute())->setName('_profiler-tag'),
+            (new ProfilerRoute($config['routePrefix'] . '/bar/{tag}', [
+                'controller' => ProfilerController::class,
+                'action' => 'barAction',
+            ], 'GET'))->beforeMatch($this->beforeMatchRoute())->setName('_profiler-bar'),
         ];
     }
 
