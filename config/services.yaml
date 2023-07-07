@@ -68,6 +68,10 @@ SerginhoLD\Phalcon\WebProfiler\Collector\DbCollector:
   arguments:
     - { type: service, name: profilerDb }
 
+SerginhoLD\Phalcon\WebProfiler\Collector\ExceptionCollector:
+  className: SerginhoLD\Phalcon\WebProfiler\Collector\ExceptionCollector
+  shared: true
+
 SerginhoLD\Phalcon\WebProfiler\Collector\ViewCollector:
   className: SerginhoLD\Phalcon\WebProfiler\Collector\ViewCollector
   shared: true

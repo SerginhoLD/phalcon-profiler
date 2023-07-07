@@ -2,6 +2,7 @@
 use Phalcon\Autoload\Loader;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Application;
+use Phalcon\Support\Debug;
 use SerginhoLD\Phalcon\WebProfiler\WebProfiler;
 
 set_error_handler(function (int $errno, string $message, string $file, int $line) {
@@ -56,5 +57,5 @@ try {
     $application->setEventsManager($container->getShared('eventsManager'));
     $application->handle($_SERVER['REQUEST_URI'])->send();
 } catch (\Throwable $e) {
-    echo '<pre>'; var_dump($e); echo '</pre>';
+    (new Debug())->onUncaughtException($e);
 }

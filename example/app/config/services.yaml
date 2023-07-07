@@ -5,6 +5,10 @@ eventsManager:
     - method: enablePriorities
       arguments:
         - { type: parameter, value: true }
+    - method: attach
+      arguments:
+        - { type: parameter, value: 'dispatch:beforeException' }
+        - { type: service, name: App\BeforeExceptionListener }
 
 router:
   className: Phalcon\Mvc\Router\Annotations

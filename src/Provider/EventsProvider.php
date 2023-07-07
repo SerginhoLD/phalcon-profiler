@@ -53,6 +53,8 @@ class EventsProvider implements ServiceProviderInterface
             // db
             ['db:beforeQuery', Collector\DbCollector::class],
             ['db:afterQuery', Collector\DbCollector::class],
+            // exception
+            ['dispatch:beforeException', Collector\ExceptionCollector::class, 1024],
             // view
             ['view:afterCompile', Collector\ViewCollector::class],
         ];

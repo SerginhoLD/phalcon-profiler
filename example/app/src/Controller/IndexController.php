@@ -7,7 +7,6 @@ use Phalcon\Mvc\Controller;
 use SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch;
 
 /**
- * @RoutePrefix('/')
  * @property-read Stopwatch|null $stopwatch
  */
 class IndexController extends Controller
@@ -25,5 +24,13 @@ class IndexController extends Controller
         $this->stopwatch?->stop('metric');
 
         // render
+    }
+
+    /**
+     * @Get('/test', name='test')
+     */
+    public function testAction(): void
+    {
+        throw new \LogicException('Test');
     }
 }

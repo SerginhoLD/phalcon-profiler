@@ -1,10 +1,15 @@
 <body>
 
-<p>header</p>
+<h4>Nav</h4>
+
+<ul>
+    <li><a href="{{ url(['for': 'home']) }}">Home</a></li>
+    <li><a href="{{ url(['for': 'test']) }}">Test exception</a></li>
+</ul>
+
+<h4>Content</h4>
 
 {% block content %}{% endblock %}
-
-<p>footer</p>
 
 {% if _profilerTag is defined %}
     <script>

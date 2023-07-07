@@ -38,6 +38,7 @@ class WebProfiler implements ServiceProviderInterface
             Collector\RequestCollector::class,
             Collector\PerformanceCollector::class,
             Collector\DbCollector::class,
+            Collector\ExceptionCollector::class,
             Collector\ViewCollector::class,
         ], $collectors);
 
