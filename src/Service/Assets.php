@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace SerginhoLD\Phalcon\WebProfiler\Service;
 
 use Phalcon\Assets\Collection;
+use Phalcon\Assets\Inline;
 use Phalcon\Assets\Manager;
 
 class Assets extends Manager
@@ -15,6 +16,7 @@ class Assets extends Manager
         $path = $this->preparePath($path);
         $ext = pathinfo($path, PATHINFO_EXTENSION);
         $assetClass = '\Phalcon\Assets\Inline\\' . ucfirst($ext);
+        /** @var Inline $asset */
         $asset = new $assetClass(file_get_contents($path));
         return $this->outputInline((new Collection())->addInline($asset), 'js' === $ext ? 'script' : 'style');
     }

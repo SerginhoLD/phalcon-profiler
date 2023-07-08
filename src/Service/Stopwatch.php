@@ -9,7 +9,7 @@ class Stopwatch
 {
     private float $origin;
 
-    private float $final;
+    private float $final = 0;
 
     private int $precision = 4;
 

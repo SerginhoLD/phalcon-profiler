@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SerginhoLD\Phalcon\WebProfiler\Collector;
 
+use Phalcon\Dispatcher\DispatcherInterface;
 use Phalcon\Events\EventInterface;
 use Throwable;
 
@@ -10,7 +11,7 @@ class ExceptionCollector implements CollectorInterface
 {
     private ?Throwable $exception = null;
 
-    public function beforeException(EventInterface $event, $dispatcher, Throwable $exception): bool
+    public function beforeException(EventInterface $event, DispatcherInterface $dispatcher, Throwable $exception): bool
     {
         $this->exception = $exception;
         return true;

@@ -10,9 +10,9 @@ use Phalcon\Http\ResponseInterface;
 
 class RequestCollector implements CollectorInterface
 {
-    private RequestInterface $request;
+    private ?RequestInterface $request = null;
 
-    private ResponseInterface $response;
+    private ?ResponseInterface $response = null;
 
     public function beforeSendResponse(EventInterface $event, InjectionAwareInterface $app, ResponseInterface $response): void
     {
@@ -42,10 +42,10 @@ HTML;
     public function collect(): array
     {
         return [
-            'query' => $this->request->getQuery(),
-            'post' => $this->request->getPost(),
-            'requestHeaders' => $this->request->getHeaders(),
-            'responseHeaders' => $this->response->getHeaders()->toArray(),
+            'query' => $this->request?->getQuery() ?? [],
+            'post' => $this->request?->getPost() ?? [],
+            'requestHeaders' => $this->request?->getHeaders() ?? [],
+            'responseHeaders' => $this->response?->getHeaders()->toArray() ?? [],
         ];
     }
 }

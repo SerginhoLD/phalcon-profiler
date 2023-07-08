@@ -14,13 +14,16 @@ class ViewCollector implements CollectorInterface
 
     public function afterCompile(EventInterface $event, AbstractEngine $engine): bool
     {
-        $activeRenderPath =  $engine->getView()->getActiveRenderPath();
+        if (method_exists($engine->getView(), 'getActiveRenderPath')) {
+            $activeRenderPath =  $engine->getView()->getActiveRenderPath();
 
-        if (is_array($activeRenderPath)) {
-            $activeRenderPath = current($activeRenderPath);
+            if (is_array($activeRenderPath)) {
+                $activeRenderPath = current($activeRenderPath);
+            }
+
+            $this->data['activeRenderPaths'][] = $activeRenderPath;
         }
 
-        $this->data['activeRenderPaths'][] = $activeRenderPath;
         return true;
     }
 

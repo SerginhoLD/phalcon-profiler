@@ -20,6 +20,12 @@ class EventsProvider implements ServiceProviderInterface
 
     private string $profilerTag;
 
+    public function __construct()
+    {
+        $this->requestTime = new \DateTimeImmutable();
+        $this->profilerTag = uniqid();
+    }
+
     public function register(DiInterface $di): void
     {
         if (!$di->has('eventsManager')) {
@@ -35,7 +41,6 @@ class EventsProvider implements ServiceProviderInterface
 
         $events = [
             // profiler
-            ['application:boot', $this, 1024],
             ['view:beforeRender', $this, 1024],
             ['application:beforeSendResponse', $this, 0],
             // request
@@ -78,13 +83,6 @@ class EventsProvider implements ServiceProviderInterface
         $managerService->setDefinition($managerDefinition);
     }
 
-    public function boot(EventInterface $event, InjectionAwareInterface $app): bool
-    {
-        $this->requestTime = new \DateTimeImmutable();
-        $this->profilerTag = uniqid();
-        return true;
-    }
-
     public function beforeRender(EventInterface $event, ViewBaseInterface $view): bool
     {
         $view->setVar('_profilerTag', $this->profilerTag);
@@ -96,7 +94,7 @@ class EventsProvider implements ServiceProviderInterface
         /** @var RouterInterface $router */
         $router = $app->getDI()->getShared('router');
 
-        if (str_starts_with($router->getMatchedRoute()?->getName() ?? '', '_profiler')) {
+        if (str_starts_with(strval($router->getMatchedRoute()?->getName()), '_profiler')) {
             return;
         }
 

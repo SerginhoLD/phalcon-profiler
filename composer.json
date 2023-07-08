@@ -16,7 +16,8 @@
     "ext-zip": "*"
   },
   "require-dev": {
-    "phalcon/ide-stubs": "v5.1.4"
+    "phalcon/ide-stubs": "v5.1.4",
+    "vimeo/psalm": "^5.13"
   },
   "autoload": {
     "psr-4": {

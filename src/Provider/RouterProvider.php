@@ -58,7 +58,7 @@ class RouterProvider implements ServiceProviderInterface
 
     private function beforeMatchRoute(): callable
     {
-        return function ($uri, ProfilerRoute $route, Router $router) {
+        return function (string $uri, ProfilerRoute $route, Router $router) {
             /** @var Dispatcher $dispatcher */
             $dispatcher = $router->getDI()->getShared('dispatcher');
             $paths = $route->getPaths();
@@ -70,7 +70,7 @@ class RouterProvider implements ServiceProviderInterface
             }
 
             // 'indexAction' => 'index'
-            $route->setProfilerAction(str_replace($dispatcher->getActionSuffix(), '', $paths['action']));
+            $route->setProfilerAction(str_replace($dispatcher->getActionSuffix(), '', (string)$paths['action']));
             return true;
         };
     }

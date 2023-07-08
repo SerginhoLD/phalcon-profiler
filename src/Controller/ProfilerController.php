@@ -33,7 +33,7 @@ class ProfilerController extends Controller
     {
         try {
             /** @var Manager $service */
-            $service = $this->getDI()->getShared(Manager::class);var_dump($service->bar($tag));
+            $service = $this->getDI()->getShared(Manager::class);
             return $this->render('@profiler/bar', $service->bar($tag));
         } catch (\Throwable $e) {
             return (new Response())->setStatusCode(500);
