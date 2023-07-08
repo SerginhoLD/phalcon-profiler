@@ -32,6 +32,7 @@ class Stopwatch
         $event = array_pop($this->stack['active'][$name]);
         $event->stop = $this->now($this->origin);
         $event->duration = round($event->stop - $event->start, $this->precision);
+        $event->memory = memory_get_usage(true) / 1024 / 1024;
         $this->stack['completed'][$name][] = $event;
     }
 

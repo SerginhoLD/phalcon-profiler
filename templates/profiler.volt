@@ -14,7 +14,7 @@
                     <span>{{ _meta['uri']|e }}</span>
                 </div>
                 <div class="row mt-2">
-                    <div class="col-auto"><span class="fw-semibold">Response:</span> {{ _meta['statusCode'] }}</div>
+                    <div class="col-auto"><span class="fw-semibold">Status&nbsp;code:</span> {{ _meta['statusCode'] }}</div>
                     <div class="col-auto"><span class="fw-semibold">Time:</span> {{ _meta['requestTime'].format('c') }}</div>
                 </div>
             </div>

@@ -114,6 +114,7 @@ class Manager extends AbstractInjectionAware
             'statusCode' => $response->getStatusCode() ?? 200,
             'requestTime' => $requestTime,
             'executionTime' => $stopwatch->final(false),
+            'peakMemoryUsage' => memory_get_peak_usage(true) / 1024 / 1024,
             'route' => !$route ? null : sprintf('%s [%s]', $route->getName(), $route->getRouteId()),
         ]);
     }

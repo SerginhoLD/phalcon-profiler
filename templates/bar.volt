@@ -6,6 +6,7 @@
             <span style="padding: 0 {{ gutter }}rem; font-weight: 600; background: {{ _meta['statusCode'] < 400 ? '#198754' : (_meta['statusCode'] < 500 ? '#fd7e14' : '#dc3545') }}">{{ _meta['statusCode'] }}</span>
             <span style="margin-left: {{ gutter }}rem"><span style="color: #adb5bd">Route:</span> {{ _meta['route']|e }}</span>
             <span style="margin-left: {{ gutter*2 }}rem">{{ _meta['executionTime'] }}&nbsp;<span style="color: #adb5bd">ms</span></span>
+            <span style="margin-left: {{ gutter*2 }}rem">{{ '%.2F'|format(_meta['peakMemoryUsage']) }}&nbsp;<span style="color: #adb5bd">MiB</span></span>
         </div>
         <div style="display: flex">
             <a href="{{ url(['for': '_profiler-tag', 'tag': _tag]) }}" style="margin-right: {{ gutter }}rem; text-decoration: none; color: #6ea8fe" target="_blank">{{ _tag }}</a>

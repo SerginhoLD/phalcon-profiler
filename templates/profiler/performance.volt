@@ -12,10 +12,18 @@
                 </div>
             </div>
         </div>
+        <div class="col-auto">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title text-info-emphasis text-center">Peak memory usage</div>
+                    <div class="card-text text-light-emphasis text-center fs-5">{{ '%.2F'|format(_meta['peakMemoryUsage']) }}&nbsp;MiB</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="mb-4">
         <div class="card">
-            <div class="card-body">
+            <div class="card-body position-relative" style="height: {{ (data['datasets']|length + 1) * 50 }}px">
                 <canvas id="performance"></canvas>
             </div>
         </div>
@@ -28,13 +36,12 @@
         const ctx = document.getElementById('performance');
 
         document.addEventListener('DOMContentLoaded', () => {
-            const data = {{ data|json_encode }};
-            ctx.height = 20 + data.datasets.length * 10;
-
             new Chart(ctx, {
                 type: 'bar',
-                data: data,
+                data: {{ data|json_encode }},
                 options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
                     indexAxis: 'y',
                     animation: false,
                     elements: {
@@ -57,7 +64,10 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    return context.dataset.labelShort + ': ' + context.dataset.data[context.dataIndex].duration + ' ms';
+                                    return context.dataset.labelShort + ': '
+                                        + context.dataset.data[context.dataIndex].duration + ' ms / '
+                                        + context.dataset.data[context.dataIndex].memory + ' MiB'
+                                        ;
                                 }
                             }
                         }

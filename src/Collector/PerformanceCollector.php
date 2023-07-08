@@ -43,13 +43,15 @@ HTML;
         foreach ($this->stopwatch->events() as $name => $events) {
             $dataset = ['labelShort' => $name];
             $sumDuration = 0;
+            $maxMemory = 0;
 
             foreach ($events as $event) {
-                $dataset['data'][] = ['y' => '', 'x' => [$event->start, $event->stop], 'duration' => $event->duration];
+                $dataset['data'][] = ['y' => '', 'x' => [$event->start, $event->stop], 'duration' => $event->duration, 'memory' => sprintf('%.2F', $event->memory)];
                 $sumDuration += $event->duration;
+                $maxMemory = max($maxMemory, $event->memory);
             }
 
-            $dataset['label'] = $name . ': ' . $sumDuration . ' ms';
+            $dataset['label'] = $name . ': ' . $sumDuration . ' ms / ' . sprintf('%.2F MiB', $maxMemory);
             $data['datasets'][] = $dataset;
         }
 
