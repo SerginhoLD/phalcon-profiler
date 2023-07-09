@@ -37,5 +37,10 @@
                 <referencedMethod name="Phalcon\Config\ConfigInterface::offsetGet" />
             </errorLevel>
         </UndefinedInterfaceMethod>
+        <UndefinedThisPropertyFetch>
+            <errorLevel type="suppress">
+                <referencedProperty name="SerginhoLD\Phalcon\WebProfiler\Controller\ProfilerController::$profilerManager" />
+            </errorLevel>
+        </UndefinedThisPropertyFetch>
     </issueHandlers>
 </psalm>

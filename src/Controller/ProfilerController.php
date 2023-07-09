@@ -9,32 +9,27 @@ use Phalcon\Mvc\Controller;
 use SerginhoLD\Phalcon\WebProfiler\Service\Manager;
 use SerginhoLD\Phalcon\WebProfiler\View\View;
 
+/**
+ * @property-read Manager profilerManager
+ */
 class ProfilerController extends Controller
 {
     public function indexAction(): ResponseInterface
     {
-        /** @var Manager $service */
-        $service = $this->getDI()->getShared(Manager::class);
-        return $this->render('@profiler/profiler/requests', ['requests' => $service->requests()]);
+        return $this->render('@profiler/profiler/requests', ['requests' => $this->profilerManager->requests()]);
     }
 
     public function tagAction(string $tag): ResponseInterface
     {
         $panel = $this->request->get('panel', null, '');
-
-        /** @var Manager $service */
-        $service = $this->getDI()->getShared(Manager::class);
-        $data = $service->data($tag, $panel);
-
+        $data = $this->profilerManager->data($tag, $panel);
         return $this->render($data['_templatePath'], $data);
     }
 
     public function barAction(string $tag): ResponseInterface
     {
         try {
-            /** @var Manager $service */
-            $service = $this->getDI()->getShared(Manager::class);
-            return $this->render('@profiler/bar', $service->bar($tag));
+            return $this->render('@profiler/bar', $this->profilerManager->bar($tag));
         } catch (\Throwable $e) {
             return (new Response())->setStatusCode(500);
         }

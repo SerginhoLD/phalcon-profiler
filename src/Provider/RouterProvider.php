@@ -5,9 +5,9 @@ namespace SerginhoLD\Phalcon\WebProfiler\Provider;
 
 use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\DiInterface;
+use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
-use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\Router;
+use Phalcon\Dispatcher\DispatcherInterface;
 use SerginhoLD\Phalcon\WebProfiler\Controller\ProfilerController;
 use SerginhoLD\Phalcon\WebProfiler\ProfilerRoute;
 
@@ -58,8 +58,8 @@ class RouterProvider implements ServiceProviderInterface
 
     private function beforeMatchRoute(): callable
     {
-        return function (string $uri, ProfilerRoute $route, Router $router) {
-            /** @var Dispatcher $dispatcher */
+        return function (string $uri, ProfilerRoute $route, InjectionAwareInterface $router) {
+            /** @var DispatcherInterface $dispatcher */
             $dispatcher = $router->getDI()->getShared('dispatcher');
             $paths = $route->getPaths();
 
