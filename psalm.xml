@@ -22,8 +22,11 @@
     </stubs>
     <projectFiles>
         <directory name="src" />
+        <directory name="example" />
         <ignoreFiles>
+            <directory name="config" />
             <directory name="vendor" />
+            <directory name="example/app/var" />
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>

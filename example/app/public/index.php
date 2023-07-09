@@ -55,6 +55,8 @@ try {
 
     $application = new Application($container);
     $application->setEventsManager($container->getShared('eventsManager'));
+
+    /** @psalm-suppress PossiblyUndefinedArrayOffset */
     $application->handle($_SERVER['REQUEST_URI'])->send();
 } catch (\Throwable $e) {
     (new Debug())->onUncaughtException($e);

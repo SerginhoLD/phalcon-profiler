@@ -9,7 +9,7 @@ class Stopwatch
 {
     private float $origin;
 
-    private float $final = 0;
+    private float $final;
 
     private int $precision = 4;
 
@@ -17,7 +17,7 @@ class Stopwatch
 
     public function __construct()
     {
-        $this->origin = $this->now(0);
+        $this->origin = $this->final = $this->now(0);
     }
 
     public function start(string $name): void

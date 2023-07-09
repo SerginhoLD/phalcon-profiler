@@ -4,6 +4,7 @@
 
 * PHP >= 8.0
 * Phalcon >= 5.1
+* ext-yaml
 * ext-zip
 
 ## Install

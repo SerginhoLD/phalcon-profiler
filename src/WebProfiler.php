@@ -26,6 +26,7 @@ class WebProfiler implements ServiceProviderInterface
         foreach ($appConfig as $key => $value) {
             if (isset($profilerConfig[$key])) {
                 if ('collectors' === $key) {
+                    /** @var array<Collector\CollectorInterface> $collectors */
                     $collectors = $value->toArray();
                     continue;
                 }
@@ -52,13 +53,7 @@ class WebProfiler implements ServiceProviderInterface
             },
         ]);
 
-        $providers = [
-            Provider\RouterProvider::class,
-            Provider\EventsProvider::class,
-        ];
-
-        foreach ($providers as $provider) {
-            (new $provider)->register($di);
-        }
+        (new Provider\RouterProvider())->register($di);
+        (new Provider\EventsProvider())->register($di);
     }
 }
