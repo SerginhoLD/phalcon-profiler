@@ -101,7 +101,7 @@ class EventsProvider implements ServiceProviderInterface
         $response->setHeader('X-Profiler-Tag', $this->profilerTag);
 
         /** @var Profiler $profiler */
-        $profiler = $app->getDI()->getShared(Profiler::class);
+        $profiler = $app->getDI()->getShared('profilerManager');
         $profiler->save($this->profilerTag, $this->requestTime, $app, $response);
     }
 }
