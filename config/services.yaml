@@ -40,6 +40,25 @@ profilerAssets:
   arguments:
     - { type: service, name: tag }
 
+profilerDump:
+  className: Phalcon\Support\Debug\Dump
+  shared: true
+  arguments:
+    - type: parameter
+      value:
+        pre: 'margin-bottom: 0'
+        other: ''
+        arr: 'color: var(--bs-emphasis-color)'
+        obj: 'color: var(--bs-emphasis-color)'
+        bool: 'color: var(--bs-warning)'
+        null: 'color: var(--bs-warning)'
+        float: 'color: var(--bs-info)'
+        int: 'color: var(--bs-info)'
+        num: 'color: var(--bs-info)'
+        str: 'color: var(--bs-teal)'
+        res: 'color: var(--bs-teal)'
+    - { type: parameter, value: true }
+
 profilerStopwatch:
   className: SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch
   shared: true

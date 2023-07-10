@@ -3,11 +3,11 @@
 
 {% block panel %}
     {% macro table(list) %}
-        <div class="table-responsive border border-bottom-0 mb-4">
-            {% if list is empty %}
-                <div class="border-bottom text-center" style="padding: 0.5rem">none</div>
-            {% else %}
-                <table class="table table-hover mb-0">
+        {% if list is empty %}
+            <div class="border text-center p-2 mb-4">none</div>
+        {% else %}
+            <div class="table-responsive mb-4">
+                <table class="table table-hover border mb-0">
                     <thead class="table-active">
                     <tr>
                         <th scope="col" style="width: 20%">Header</th>
@@ -23,8 +23,8 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
     {% endmacro %}
 
     <h2>GET</h2>

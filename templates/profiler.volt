@@ -1,6 +1,6 @@
 {# profiler #}
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark">
 {{ partial('@profiler/partials/head') }}
 <body>
 {{ partial('@profiler/partials/header.nav', ['_tag': _tag, '_panel': _panel]) }}
@@ -22,10 +22,10 @@
         </div>
     </div>
     <div class="row gx-4">
-        <div class="col-3">
+        <div class="col-sm-12 col-md-auto mb-4" style="min-width: 14rem">
             {{ partial('@profiler/partials/collectors.nav', ['_tag': _tag, '_panel': _panel]) }}
         </div>
-        <div class="col-9">
+        <div class="col-sm-12 col-md">
             {% block panel %}{% endblock %}
         </div>
     </div>

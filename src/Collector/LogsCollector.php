@@ -48,15 +48,25 @@ HTML;
             $item = $log['item'];
 
             $items[] = [
-                'level' => $item->getLevelName(),
+                'level' => $item->getLevel(),
+                'levelName' => $item->getLevelName(),
                 'datetime' => $item->getDateTime(),
                 'context' => $item->getContext(),
                 'message' => $log['message'],
                 'backtrace' => $log['backtrace'],
             ];
 
-            $buttons[$item->getLevelName()] = $item->getLevelName();
+            if (!isset($buttons[$item->getLevel()])) {
+                $buttons[$item->getLevel()] = [
+                    'name' => $item->getLevelName(),
+                    'count' => 0,
+                ];
+            }
+
+            $buttons[$item->getLevel()]['count'] += 1;
         }
+
+        ksort($buttons);
 
         return [
             'items' => $items,

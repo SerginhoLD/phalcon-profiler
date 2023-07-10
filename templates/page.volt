@@ -1,6 +1,6 @@
 {# page #}
 <!DOCTYPE html>
-<html lang="ru" data-bs-theme="dark">
+<html lang="en" data-bs-theme="dark">
 {{ partial('@profiler/partials/head') }}
 <body>
 {{ partial('@profiler/partials/header.nav') }}

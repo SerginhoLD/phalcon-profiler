@@ -1,6 +1,6 @@
 {# partials/collectors.nav #}
 <div class="card">
-    <div class="card-body">
+    <div class="card-body" style="--bs-card-spacer-y: 0.5rem">
         <ul class="navbar-nav">
             {% for collector in this.profilerManager.collectors() %}
                 <li class="nav-item">

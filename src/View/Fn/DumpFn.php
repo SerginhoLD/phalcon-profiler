@@ -50,17 +50,20 @@ class DumpFn
 
     private function dumpString(mixed $str): string
     {
-        $result = sprintf('<span class="text-teal">%s</span>', htmlspecialchars((string)$str));
+        $color = 'var(--bs-teal)';
 
-        if (!is_string($str)) {
-            return $result;
+        if (is_int($str) || is_float($str)) {
+            $color = 'var(--bs-info)';
+        } else if (is_bool($str) || is_null($str)) {
+            $color = 'var(--bs-warning)';
         }
 
-        return sprintf('<span class="text-body-emphasis">"</span>%s<span class="text-body-emphasis">"</span>', $result);
+        $result = sprintf('<span style="color: %s">%s</span>', $color, htmlspecialchars((string)$str));
+        return is_string($str) ? sprintf('"%s"', $result) : $result;
     }
 
     private function dumpKey(mixed $key): string
     {
-        return sprintf('<span class="text-body-emphasis">"</span><span class="text-info">%s</span><span class="text-body-emphasis">"</span>', htmlspecialchars((string)$key));
+        return sprintf('"<span style="color: var(--bs-emphasis-color)">%s</span>"', htmlspecialchars((string)$key));
     }
 }

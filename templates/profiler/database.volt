@@ -44,10 +44,8 @@
                                 <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapseBacktrace_{{ connId }}_{{ idx }}" role="button" aria-expanded="false">
                                     backtrace
                                 </a>
-                                <div class="collapse" id="collapseBacktrace_{{ connId }}_{{ idx }}">
-                                    <div class="card card-body">
-                                        {{ profiler_dump(item['backtrace']) }}
-                                    </div>
+                                <div class="collapse mt-2" id="collapseBacktrace_{{ connId }}_{{ idx }}">
+                                    {{ profiler_dump(item['backtrace']) }}
                                 </div>
                             </div>
                         </td>

@@ -6,9 +6,12 @@
     {% if items is empty %}
         <div class="border p-2">No logs. Use <code>$di->getShared('profilerLoggerAdapter')</code>.</div>
     {% else %}
-        <div class="btn-group btn-group-sm mb-2">
-            {% for name in buttons %}
-                <a href="#" class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target=".lvl-{{ name|e }}" aria-expanded="true">{{ name|e }}</a>
+        <div class="mb-2">
+            {% for num, btn in buttons %}
+                {% set color = num < 4 ? 'danger' : (num === 4 ? 'warning' : (num < 7 ? 'primary' : 'light')) %}
+                <a href="#" class="btn btn-sm btn-{{ color }} fw-semibold" data-bs-toggle="collapse" data-bs-target=".tr-{{ btn['name']|e }}" aria-expanded="true">
+                    {{ btn['name']|e }}<span class="badge text-bg-dark ms-2">{{ btn['count'] }}</span>
+                </a>
             {% endfor %}
         </div>
         <div class="table-responsive">
@@ -22,9 +25,11 @@
                 </thead>
                 <tbody>
                 {% for idx, item in items %}
-                    <tr class="collapse show lvl-{{ item['level']|e }}">
+                    <tr class="collapse show tr-{{ item['levelName']|e }}">
                         <td>
-                            <span class="badge text-bg-light">{{ item['level']|e }}</span>
+                            {% set num = item['level'] %}
+                            {% set color = num < 4 ? 'danger' : (num === 4 ? 'warning' : (num < 7 ? 'primary' : 'light')) %}
+                            <span class="badge text-bg-{{ color }}">{{ item['levelName']|e }}</span>
                         </td>
                         <td>{{ item['datetime'].format('c') }}</td>
                         <td>
@@ -36,7 +41,7 @@
                                 trace
                             </a>
                             <div class="mt-2 collapse" id="collapseContext_{{ idx }}">
-                                <pre class="mb-0">{{ dump(item['context']) }}</pre>
+                                {{ this.profilerDump.variable(item['context']) }}
                             </div>
                             <div class="mt-2 collapse" id="collapseTrace_{{ idx }}">
                                 {{ profiler_dump(item['backtrace']) }}
