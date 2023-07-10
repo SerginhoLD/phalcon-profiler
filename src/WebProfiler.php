@@ -40,6 +40,7 @@ class WebProfiler implements ServiceProviderInterface
             Collector\RequestCollector::class,
             Collector\PerformanceCollector::class,
             Collector\DbCollector::class,
+            Collector\LogsCollector::class,
             Collector\ExceptionCollector::class,
             Collector\ViewCollector::class,
         ], $collectors);
@@ -54,9 +55,7 @@ class WebProfiler implements ServiceProviderInterface
             },
         ]);
 
-        $eventsManager = $di->getInternalEventsManager();
-
-        if (!$eventsManager) {
+        if (!$di->getInternalEventsManager()) {
             $di->setInternalEventsManager(new Manager());
         }
 

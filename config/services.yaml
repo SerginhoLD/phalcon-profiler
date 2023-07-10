@@ -48,6 +48,12 @@ profilerDb:
   className: Phalcon\Db\Profiler
   shared: true
 
+profilerLoggerAdapter:
+  className: SerginhoLD\Phalcon\WebProfiler\Logger\ProfilerAdapter
+  shared: true
+  arguments:
+    - { type: service, name: eventsManager }
+
 profilerManager:
   className: SerginhoLD\Phalcon\WebProfiler\Service\Manager
   shared: true
@@ -67,6 +73,10 @@ SerginhoLD\Phalcon\WebProfiler\Collector\DbCollector:
   shared: true
   arguments:
     - { type: service, name: profilerDb }
+
+SerginhoLD\Phalcon\WebProfiler\Collector\LoggerCollector:
+  className: SerginhoLD\Phalcon\WebProfiler\Collector\LoggerCollector
+  shared: true
 
 SerginhoLD\Phalcon\WebProfiler\Collector\ExceptionCollector:
   className: SerginhoLD\Phalcon\WebProfiler\Collector\ExceptionCollector

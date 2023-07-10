@@ -25,7 +25,7 @@ class DbCollector implements CollectorInterface
         $this->weakMap[$this->profiler->getLastProfile()] = [
             'connId' => $conn->getConnectionId(),
             'type' => $conn->getType(),
-            'backtrace' => array_slice(debug_backtrace(2), 3),
+            'backtrace' => array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 3),
         ];
     }
 

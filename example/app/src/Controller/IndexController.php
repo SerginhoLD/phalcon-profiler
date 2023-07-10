@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Phalcon\Logger\Logger;
 use Phalcon\Mvc\Controller;
 use SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch;
 
 /**
+ * @property-read Logger $logger
  * @property-read Stopwatch|null $stopwatch
  */
 class IndexController extends Controller
@@ -17,10 +19,12 @@ class IndexController extends Controller
     public function indexAction(): void
     {
         $this->stopwatch?->start('metric');
+        $this->logger->debug('start', ['action' => 'index']);
 
         // data
-        usleep(rand(500, 1000));
+        usleep($usleep = rand(500, 1000));
 
+        $this->logger->info('usleep: %usleep%', ['usleep' => $usleep, 'action' => 'index']);
         $this->stopwatch?->stop('metric');
 
         // render

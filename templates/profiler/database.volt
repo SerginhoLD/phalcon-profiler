@@ -41,7 +41,7 @@
                             <div><code>{{ item['query'].getSqlStatement()|e }}</code></div>
                             <div class="mt-2">{{ profiler_dump(item['query'].getSqlVariables()) }}</div>
                             <div class="mt-2">
-                                <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapseBacktrace_{{ connId }}_{{ idx }}" role="button" aria-expanded="false" aria-controls="collapseBacktrace">
+                                <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapseBacktrace_{{ connId }}_{{ idx }}" role="button" aria-expanded="false">
                                     backtrace
                                 </a>
                                 <div class="collapse" id="collapseBacktrace_{{ connId }}_{{ idx }}">

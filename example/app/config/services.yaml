@@ -65,3 +65,15 @@ volt:
         - type: parameter
           value:
             path: !config application.viewsCachePath
+
+logger:
+  className: Phalcon\Logger\Logger
+  shared: true
+  arguments:
+    - { type: parameter, value: main }
+  calls:
+    - method: addAdapter
+      arguments:
+        - { type: parameter, value: profiler }
+        - { type: service, name: profilerLoggerAdapter }
+

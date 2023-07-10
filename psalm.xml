@@ -14,6 +14,7 @@
         <file name="vendor/phalcon/ide-stubs/src/Di/AbstractInjectionAware.php" />
         <file name="vendor/phalcon/ide-stubs/src/Di/DiInterface.php" />
         <file name="vendor/phalcon/ide-stubs/src/Di/Injectable.php" />
+        <file name="vendor/phalcon/ide-stubs/src/Logger/Adapter/AbstractAdapter.php" />
         <file name="vendor/phalcon/ide-stubs/src/Mvc/Router/Route.php" />
         <file name="vendor/phalcon/ide-stubs/src/Mvc/View/Simple.php" />
         <file name="vendor/phalcon/ide-stubs/src/Mvc/View/Engine/AbstractEngine.php" />
