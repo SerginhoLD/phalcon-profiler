@@ -7,6 +7,7 @@ use Phalcon\Config\ConfigInterface;
 use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\ServiceProviderInterface;
+use Phalcon\Events\Manager;
 use SerginhoLD\Phalcon\WebProfiler\Collector;
 use SerginhoLD\Phalcon\WebProfiler\Provider;
 
@@ -53,7 +54,13 @@ class WebProfiler implements ServiceProviderInterface
             },
         ]);
 
-        (new Provider\RouterProvider())->register($di);
+        $eventsManager = $di->getInternalEventsManager();
+
+        if (!$eventsManager) {
+            $di->setInternalEventsManager(new Manager());
+        }
+
+        (new Provider\RouterProvider($profilerConfig['routePrefix']))->register($di);
         (new Provider\EventsProvider())->register($di);
     }
 }

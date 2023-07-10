@@ -5,10 +5,10 @@ namespace SerginhoLD\Phalcon\WebProfiler\Collector;
 
 use Phalcon\Db\Adapter\AdapterInterface;
 use Phalcon\Di\InjectionAwareInterface;
-use Phalcon\Dispatcher\AbstractDispatcher;
+use Phalcon\Dispatcher\DispatcherInterface;
 use Phalcon\Events\EventInterface;
 use Phalcon\Http\ResponseInterface;
-use Phalcon\Mvc\View\Engine\AbstractEngine;
+use Phalcon\Mvc\View\Engine\EngineInterface;
 use SerginhoLD\Phalcon\WebProfiler\Service\Stopwatch;
 
 class PerformanceCollector implements CollectorInterface
@@ -78,13 +78,13 @@ HTML;
         return true;
     }
 
-    public function beforeDispatch(EventInterface $event, AbstractDispatcher $dispatcher): bool
+    public function beforeDispatch(EventInterface $event, DispatcherInterface $dispatcher): bool
     {
         $this->stopwatch->start('dispatch');
         return true;
     }
 
-    public function afterBinding(EventInterface $event, AbstractDispatcher $dispatcher): bool
+    public function afterBinding(EventInterface $event, DispatcherInterface $dispatcher): bool
     {
         $this->stopwatch->stop('dispatch');
         return true;
@@ -101,13 +101,13 @@ HTML;
         $this->stopwatch->stop('db');
     }
 
-    public function beforeCompile(EventInterface $event, AbstractEngine $engine): bool
+    public function beforeCompile(EventInterface $event, EngineInterface $engine): bool
     {
         $this->stopwatch->start('view');
         return true;
     }
 
-    public function afterCompile(EventInterface $event, AbstractEngine $engine): bool
+    public function afterCompile(EventInterface $event, EngineInterface $engine): bool
     {
         $this->stopwatch->stop('view');
         return true;

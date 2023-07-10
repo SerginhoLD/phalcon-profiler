@@ -15,7 +15,7 @@ class ViewCollector implements CollectorInterface
     public function afterCompile(EventInterface $event, AbstractEngine $engine): bool
     {
         if (method_exists($engine->getView(), 'getActiveRenderPath')) {
-            $activeRenderPath =  $engine->getView()->getActiveRenderPath();
+            $activeRenderPath = $engine->getView()->getActiveRenderPath();
 
             if (is_array($activeRenderPath)) {
                 $activeRenderPath = current($activeRenderPath);

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace SerginhoLD\Phalcon\WebProfiler\Provider;
 
+use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
@@ -20,6 +21,8 @@ class EventsProvider implements ServiceProviderInterface
 
     private string $profilerTag;
 
+    private bool $isResolved = false;
+
     public function __construct()
     {
         $this->requestTime = new \DateTimeImmutable();
@@ -28,16 +31,20 @@ class EventsProvider implements ServiceProviderInterface
 
     public function register(DiInterface $di): void
     {
-        if (!$di->has('eventsManager')) {
+        /** @var Di $di */
+        $di->getInternalEventsManager()->attach('di:afterServiceResolve', $this);
+    }
+
+    public function afterServiceResolve(EventInterface $event, DiInterface $di, array $data): void
+    {
+        if ($this->isResolved || 'eventsManager' !== $data['name']) {
             return;
         }
 
-        $managerService = $di->getService('eventsManager');
-        $managerDefinition = $managerService->getDefinition();
+        $this->isResolved = true;
 
-        if ($managerService->isResolved()) {
-            throw new \RuntimeException('Service "eventsManager" is resolved');
-        }
+        /** @var Manager $eventsManager */
+        $eventsManager = $data['instance'];
 
         $events = [
             // profiler
@@ -66,21 +73,8 @@ class EventsProvider implements ServiceProviderInterface
 
         foreach ($events as $event) {
             [$name, $obj] = $event;
-            $priority = $event[2] ?? Manager::DEFAULT_PRIORITY;
-            $paramType = is_object($obj) ? 'parameter' : 'service';
-            $paramName = is_object($obj) ? 'value' : 'name';
-
-            $managerDefinition['calls'][] = [
-                'method' => 'attach',
-                'arguments' => [
-                    ['type' => 'parameter', 'value' => $name],
-                    ['type' => $paramType, $paramName => $obj],
-                    ['type' => 'parameter', 'value' => $priority],
-                ],
-            ];
+            $eventsManager->attach($name, is_object($obj) ? $obj : $di->getShared($obj), $event[2] ?? Manager::DEFAULT_PRIORITY);
         }
-
-        $managerService->setDefinition($managerDefinition);
     }
 
     public function beforeRender(EventInterface $event, ViewBaseInterface $view): bool

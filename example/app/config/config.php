@@ -12,7 +12,7 @@ return new Config([
     'profiler' => [
         'viewsCachePath' => dirname(__DIR__) . '/var/cache/volt/',
         'tagsDir' => dirname(__DIR__) . '/var/profiler',
-        'collectors'=>[
+        'collectors' => [
             CustomCollector::class,
         ],
     ],

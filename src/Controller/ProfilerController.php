@@ -31,7 +31,7 @@ class ProfilerController extends Controller
         try {
             return $this->render('@profiler/bar', $this->profilerManager->bar($tag));
         } catch (\Throwable $e) {
-            return (new Response())->setStatusCode(500);
+            return (new Response())->setStatusCode(500, $e->getMessage());
         }
     }
 

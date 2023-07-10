@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace SerginhoLD\Phalcon\WebProfiler;
 
-use Phalcon\Mvc\Router\Route;
-
-class ProfilerRoute extends Route
+class Route extends \Phalcon\Mvc\Router\Route
 {
     public function setProfilerController(string $namespace, string $controller): static
     {

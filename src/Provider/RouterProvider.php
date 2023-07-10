@@ -3,62 +3,62 @@ declare(strict_types=1);
 
 namespace SerginhoLD\Phalcon\WebProfiler\Provider;
 
-use Phalcon\Config\ConfigInterface;
+use Phalcon\Di\Di;
 use Phalcon\Di\DiInterface;
 use Phalcon\Di\InjectionAwareInterface;
 use Phalcon\Di\ServiceProviderInterface;
 use Phalcon\Dispatcher\DispatcherInterface;
+use Phalcon\Events\EventInterface;
+use Phalcon\Mvc\RouterInterface;
 use SerginhoLD\Phalcon\WebProfiler\Controller\ProfilerController;
-use SerginhoLD\Phalcon\WebProfiler\ProfilerRoute;
+use SerginhoLD\Phalcon\WebProfiler\Route;
 
 class RouterProvider implements ServiceProviderInterface
 {
+    private bool $isResolved = false;
+
+    public function __construct(private string $routePrefix) {}
+
     public function register(DiInterface $di): void
     {
-        if (!$di->has('router')) {
+        /** @var Di $di */
+        $di->getInternalEventsManager()->attach('di:afterServiceResolve', $this);
+    }
+
+    public function afterServiceResolve(EventInterface $event, DiInterface $di, array $data): void
+    {
+        if ($this->isResolved || 'router' !== $data['name']) {
             return;
         }
 
-        $routerService = $di->getService('router');
-        $routerDefinition = $routerService->getDefinition();
+        $this->isResolved = true;
 
-        if ($routerService->isResolved()) {
-            throw new \RuntimeException('Service "router" is resolved');
-        }
+        /** @var RouterInterface $router */
+        $router = $data['instance'];
 
-        foreach ($this->getRoutes($di->getShared('profilerConfig')) as $route) {
-            $routerDefinition['calls'][] = [
-                'method' => 'attach',
-                'arguments' => [
-                    ['type' => 'parameter', 'value' => $route]
-                ],
-            ];
-        }
-
-        $routerService->setDefinition($routerDefinition);
-    }
-
-    private function getRoutes(ConfigInterface $config): array
-    {
-        return [
-            (new ProfilerRoute($config['routePrefix'], [
+        $routes = [
+            (new Route($this->routePrefix, [
                 'controller' => ProfilerController::class,
                 'action' => 'indexAction',
             ], 'GET'))->beforeMatch($this->beforeMatchRoute())->setName('_profiler'),
-            (new ProfilerRoute($config['routePrefix'] . '/tag/{tag}', [
+            (new Route($this->routePrefix . '/tag/{tag}', [
                 'controller' => ProfilerController::class,
                 'action' => 'tagAction',
             ], 'GET'))->beforeMatch($this->beforeMatchRoute())->setName('_profiler-tag'),
-            (new ProfilerRoute($config['routePrefix'] . '/bar/{tag}', [
+            (new Route($this->routePrefix . '/bar/{tag}', [
                 'controller' => ProfilerController::class,
                 'action' => 'barAction',
             ], 'GET'))->beforeMatch($this->beforeMatchRoute())->setName('_profiler-bar'),
         ];
+
+        foreach ($routes as $route) {
+            $router->attach($route);
+        }
     }
 
     private function beforeMatchRoute(): callable
     {
-        return function (string $uri, ProfilerRoute $route, InjectionAwareInterface $router) {
+        return function (string $uri, Route $route, InjectionAwareInterface $router) {
             /** @var DispatcherInterface $dispatcher */
             $dispatcher = $router->getDI()->getShared('dispatcher');
             $paths = $route->getPaths();
