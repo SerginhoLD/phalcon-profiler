@@ -15,10 +15,7 @@ class ProfilerAdapter extends AbstractAdapter
 
     public function process(Item $item): void
     {
-        $this->eventsManager->fire('profiler:log', $this, [
-            'item' => $item,
-            'backtrace' => array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 2),
-        ]);
+        $this->eventsManager->fire('profiler:log', $this, $item);
     }
 
     public function close(): bool

@@ -11,10 +11,13 @@ class LogsCollector implements CollectorInterface
 {
     private array $logs = [];
 
-    public function log(EventInterface $event, AdapterInterface $adapter, array $data): void
+    public function log(EventInterface $event, AdapterInterface $adapter, Item $item): void
     {
-        $data['message'] = $adapter->getFormatter()->format($data['item']);
-        $this->logs[] = $data;
+        $this->logs[] = [
+            'item' => $item,
+            'message' => $adapter->getFormatter()->format($item),
+            'backtrace' => array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 5),
+        ];
     }
 
     public function templatePath(): string
