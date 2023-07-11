@@ -4,9 +4,7 @@
 {% block panel %}
     <h1>Logs</h1>
     {% if items is empty %}
-        <div class="border p-2 mb-4">
-            No logs. Use <code>$di->getShared('profilerLoggerAdapter')</code>.
-        </div>
+        <div class="border text-center p-2 mb-4">none</div>
     {% else %}
         <div class="mb-2">
             {% for num, btn in buttons %}
@@ -40,7 +38,7 @@
                                 context
                             </a>
                             <a class="text-decoration-none" data-bs-toggle="collapse" href="#collapseTrace_{{ idx }}" role="button" aria-expanded="false">
-                                trace
+                                backtrace
                             </a>
                             <div class="mt-2 collapse" id="collapseContext_{{ idx }}">
                                 {{ this.profilerDump.variable(item['context']) }}

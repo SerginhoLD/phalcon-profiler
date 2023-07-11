@@ -21,7 +21,10 @@ class ViewCollector implements CollectorInterface
                 $activeRenderPath = current($activeRenderPath);
             }
 
-            $this->data['activeRenderPaths'][] = $activeRenderPath;
+            $this->data['activeRenderPaths'][] = [
+                'path' => $activeRenderPath,
+                'backtrace' => array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 3),
+            ];
         }
 
         return true;
