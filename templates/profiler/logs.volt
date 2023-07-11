@@ -4,12 +4,14 @@
 {% block panel %}
     <h1>Logs</h1>
     {% if items is empty %}
-        <div class="border p-2">No logs. Use <code>$di->getShared('profilerLoggerAdapter')</code>.</div>
+        <div class="border p-2 mb-4">
+            No logs. Use <code>$di->getShared('profilerLoggerAdapter')</code>.
+        </div>
     {% else %}
         <div class="mb-2">
             {% for num, btn in buttons %}
                 {% set color = num < 4 ? 'danger' : (num === 4 ? 'warning' : (num < 7 ? 'primary' : 'light')) %}
-                <a href="#" class="btn btn-sm btn-{{ color }} fw-semibold" data-bs-toggle="collapse" data-bs-target=".tr-{{ btn['name']|e }}" aria-expanded="true">
+                <a href=".tr-{{ btn['name']|e }}" class="btn btn-sm btn-{{ color }} fw-semibold" data-bs-toggle="collapse" role="button" aria-expanded="true">
                     {{ btn['name']|e }}<span class="badge text-bg-dark ms-2">{{ btn['count'] }}</span>
                 </a>
             {% endfor %}
@@ -33,7 +35,7 @@
                         </td>
                         <td>{{ item['datetime'].format('c') }}</td>
                         <td>
-                            <div class="block-break-all mb-2 text-light-emphasis">{{ item['message']|e }}</div>
+                            <div class="block-break-all mb-2">{{ item['message'] }}</div>
                             <a class="me-2 text-decoration-none" data-bs-toggle="collapse" href="#collapseContext_{{ idx }}" role="button" aria-expanded="false">
                                 context
                             </a>

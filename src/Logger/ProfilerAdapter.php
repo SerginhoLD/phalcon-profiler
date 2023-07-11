@@ -9,6 +9,8 @@ use Phalcon\Logger\Item;
 
 class ProfilerAdapter extends AbstractAdapter
 {
+    protected $defaultFormatter = ProfilerLineFormatter::class;
+
     public function __construct(private ManagerInterface $eventsManager) {}
 
     public function process(Item $item): void

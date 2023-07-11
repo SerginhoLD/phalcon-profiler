@@ -23,7 +23,7 @@
     </div>
     <div class="mb-4">
         <div class="card">
-            <div class="card-body position-relative" style="height: {{ (data['datasets']|length + 1) * 50 }}px">
+            <div class="card-body position-relative" style="height: {{ (data['datasets']|length + 2) * 50 }}px">
                 <canvas id="performance"></canvas>
             </div>
         </div>

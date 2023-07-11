@@ -25,6 +25,7 @@ class IndexController extends Controller
         usleep($usleep = rand(500, 1000));
 
         $this->logger->info('usleep: %usleep%', ['usleep' => $usleep, 'action' => 'index']);
+        $this->logger->debug('stop', ['action' => 'index']);
         $this->stopwatch?->stop('metric');
 
         // render

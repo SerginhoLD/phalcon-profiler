@@ -90,6 +90,31 @@ content
 
 ![screenshot.bar.png](screenshot.bar.png)
 
+## Logger
+
+Create a logger adapter:
+```php
+$container->setShared('devLoggerAdapter', function () use ($container) {
+    return $container->has('profilerLoggerAdapter')
+        ? $container->getShared('profilerLoggerAdapter')
+        : new \Phalcon\Logger\Adapter\Noop();
+});
+```
+
+Usage:
+```yaml
+logger:
+  className: Phalcon\Logger\Logger
+  shared: true
+  arguments:
+    - { type: parameter, value: main }
+  calls:
+    - method: addAdapter
+      arguments:
+        - { type: parameter, value: profiler }
+        - { type: service, name: devLoggerAdapter }
+```
+
 ## Stopwatch in production
 
 Create a stopwatch adapter:
